@@ -18,8 +18,28 @@ def remove_wall(
     :param coord:
     :return:
     """
+    # Реализация от любой точки???
 
-    pass
+    smeshenia = [(0, +1), (+1, 0)]  # Направления смещения: вверх и вправо
+
+    for y, el in enumerate(grid):
+        for x, pos in enumerate(el):
+            direction = choice((0, 1))
+
+            if grid[y][x] == ' ' and x != 14 and y != 14:
+                # Проверка на выход из поля
+                s_y = y + smeshenia[direction][1]
+                s_x = x + smeshenia[direction][0]
+                if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(el)) and s_x!=14 and s_y!=14:
+                    grid[y + smeshenia[direction][1]][x + smeshenia[direction][0]] = " "
+
+                elif (0 <= (y + smeshenia[(direction + 1) % 2][1]) < len(grid)) and (0 <= ( x + smeshenia[(direction + 1) % 2][0]) < len(el)) and s_x!= 14 and s_y != 14:
+                    grid[y + smeshenia[(direction + 1) % 2][1]][x + smeshenia[(direction + 1) % 2][0]] = " "
+
+                else:
+                    continue
+
+    return grid
 
 
 def bin_tree_maze(
@@ -47,6 +67,7 @@ def bin_tree_maze(
     # выбрать второе возможное направление
     # 3. перейти в следующую клетку, сносим между клетками стену
     # 4. повторять 2-3 до тех пор, пока не будут пройдены все клетки
+    remove_wall(grid, (0, 0))
 
     # генерация входа и выхода
     if random_exit:
@@ -68,6 +89,7 @@ def get_exits(grid: List[List[Union[str, int]]]) -> List[Tuple[int, int]]:
     :param grid:
     :return:
     """
+
 
     pass
 
