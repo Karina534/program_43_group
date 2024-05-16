@@ -13,7 +13,6 @@ def draw_cell(x, y, color, size: int = 10):
 
 
 def draw_maze(grid: List[List[str]], size: int = 10):
-    color = None
     for x, row in enumerate(grid):
         for y, cell in enumerate(row):
             if cell == " ":
@@ -36,7 +35,7 @@ def show_solution():
 
 if __name__ == "__main__":
     global GRID, CELL_SIZE
-    N, M = 30, 30
+    N, M = 51, 77
 
     CELL_SIZE = 10
     GRID = bin_tree_maze(N, M)
