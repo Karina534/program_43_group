@@ -9,9 +9,7 @@ def create_grid(rows: int = 15, cols: int = 15) -> List[List[Union[str, int]]]:
     return [["■"] * cols for _ in range(rows)]
 
 
-def remove_wall(
-    grid: List[List[Union[str, int]]], coord: Tuple[int, int]
-) -> List[List[Union[str, int]]]:
+def remove_wall(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> List[List[Union[str, int]]]:
     """
 
     :param grid:
@@ -25,7 +23,7 @@ def remove_wall(
         for x, pos in enumerate(el):
             direction = choice((0, 1))
 
-            if grid[y][x] == ' ':
+            if grid[y][x] == " ":
                 # Проверка на выход из поля
                 s_y = y + smeshenia[direction][1]
                 s_x = x + smeshenia[direction][0]
@@ -33,7 +31,12 @@ def remove_wall(
                 if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(el)):
                     grid[y + smeshenia[direction][1]][x + smeshenia[direction][0]] = " "
 
-                elif (0 <= (y + smeshenia[(direction + 1) % 2][1]) < len(grid)) and (0 <= ( x + smeshenia[(direction + 1) % 2][0]) < len(el)) and s_x!= 14 and s_y != 14:
+                elif (
+                    (0 <= (y + smeshenia[(direction + 1) % 2][1]) < len(grid))
+                    and (0 <= (x + smeshenia[(direction + 1) % 2][0]) < len(el))
+                    and s_x != 14
+                    and s_y != 14
+                ):
                     grid[y + smeshenia[(direction + 1) % 2][1]][x + smeshenia[(direction + 1) % 2][0]] = " "
 
                 else:
@@ -42,9 +45,7 @@ def remove_wall(
     return grid
 
 
-def bin_tree_maze(
-    rows: int = 15, cols: int = 15, random_exit: bool = True
-) -> List[List[Union[str, int]]]:
+def bin_tree_maze(rows: int = 15, cols: int = 15, random_exit: bool = True) -> List[List[Union[str, int]]]:
     """
 
     :param rows:
@@ -105,14 +106,15 @@ def get_exits(grid: List[List[Union[str, int]]]) -> List[Tuple[int, int]]:
     return [(y_start, x_start), (y_end, x_end)]
 
 
-def make_step(grid: List[List[Union[str, int]]], k: int) -> [List[List[Union[str, int]]], bool]:
+def make_step(grid: List[List[Union[str, int]]], k: int):
     """
 
     :param grid:
     :param k:
     :return:
     """
-    def make_num_around(grid: List[List[Union[str, int]]], x: int, y: int) -> [List[List[Union[str, int]]], bool]:
+
+    def make_num_around(grid: List[List[Union[str, int]]], x: int, y: int):
         ways = [0, 0, 0, 0]
         cheshwnia = [(0, -1), (0, +1), (-1, 0), (+1, 0)]  # Верх, Низ, Лево, Право
 
@@ -123,9 +125,9 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> [List[List[Union[str
             if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(grid[0])) and grid[s_y][s_x] != "■":
 
                 if grid[s_y][s_x] == 0:
-                    grid[s_y][s_x] = k+1
+                    grid[s_y][s_x] = k + 1
                 else:
-                    grid[s_y][s_x] = min(k+1, grid[s_y][s_x])
+                    grid[s_y][s_x] = min(k + 1, grid[s_y][s_x])
 
                 ways[i] = True
 
@@ -203,7 +205,7 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
 
     cheshwnia = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Влево, вправо, вниз, вверх
     for i in range(4):
-        if ( 0 <= (x_pos + cheshwnia[i][0]) < len(grid[1]) ) and ( 0 <= (y_pos + cheshwnia[i][1]) < len(grid)):
+        if (0 <= (x_pos + cheshwnia[i][0]) < len(grid[1])) and (0 <= (y_pos + cheshwnia[i][1]) < len(grid)):
             if grid[y_pos + cheshwnia[i][1]][x_pos + cheshwnia[i][0]] != "■":
                 return True
     return False
@@ -250,6 +252,7 @@ def solve_maze(
 
     # 3. По полученной разметке ищем путь домой
     return grid, shortest_path(grid, (y_end, x_end))
+
 
 def add_path_to_grid(
     grid: List[List[Union[str, int]]], path: Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]
