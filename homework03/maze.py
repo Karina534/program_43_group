@@ -29,6 +29,7 @@ def remove_wall(
                 # Проверка на выход из поля
                 s_y = y + smeshenia[direction][1]
                 s_x = x + smeshenia[direction][0]
+
                 if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(el)):
                     grid[y + smeshenia[direction][1]][x + smeshenia[direction][0]] = " "
 
@@ -100,7 +101,7 @@ def get_exits(grid: List[List[Union[str, int]]]) -> List[Tuple[int, int]]:
                 else:
                     x_end = x
                     y_end = y
-    print('I have found start and end', (y_start, x_start), (y_end, x_end))
+
     return [(y_start, x_start), (y_end, x_end)]
 
 
@@ -118,6 +119,7 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> [List[List[Union[str
         for i in range(4):
             s_y = y + cheshwnia[i][1]
             s_x = x + cheshwnia[i][0]
+
             if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(grid[0])) and grid[s_y][s_x] != "■":
 
                 if grid[s_y][s_x] == 0:
@@ -129,9 +131,11 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> [List[List[Union[str
 
         if ways.count(True) > 0:
             return grid, True
+
         return grid, False
 
     is_any_changes_on_k = []
+
     for y, ely in enumerate(grid):
         for x, elx in enumerate(ely):
             if elx == k:
@@ -143,6 +147,7 @@ def make_step(grid: List[List[Union[str, int]]], k: int) -> [List[List[Union[str
 
     if is_any_changes_on_k.count(True) > 0:
         return grid, True
+
     return grid, False
 
 
@@ -150,18 +155,18 @@ def shortest_path(
     grid: List[List[Union[str, int]]], exit_coord: Tuple[int, int]
 ) -> Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]:
     """
-
+    Находит кратчайший путь
     :param grid:
     :param exit_coord:
     :return:
     """
-    print('exit_coord in shortest_path', exit_coord) #y, x
 
     cheshwnia = [(0, -1), (0, +1), (-1, 0), (+1, 0)]
     way = []
     way.append(exit_coord)
 
     k = int(grid[exit_coord[0]][exit_coord[1]])
+
     while k != 1:
         count = 0
         for i in range(4):
@@ -188,7 +193,7 @@ def shortest_path(
 
 def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> bool:
     """
-
+    Проверяет, не в тупике ли мы
     :param grid:
     :param coord:
     :return:
@@ -198,11 +203,8 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
 
     cheshwnia = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Влево, вправо, вниз, вверх
     for i in range(4):
-        #print(f'Проверил {i}')
         if ( 0 <= (x_pos + cheshwnia[i][0]) < len(grid[1]) ) and ( 0 <= (y_pos + cheshwnia[i][1]) < len(grid)):
-            #print(f'Находится на поле {y_pos + cheshwnia[i][1]}, {x_pos + cheshwnia[i][0]}')
             if grid[y_pos + cheshwnia[i][1]][x_pos + cheshwnia[i][0]] != "■":
-                #print('Не является тупиком\n')
                 return True
     return False
 
@@ -211,12 +213,11 @@ def solve_maze(
     grid: List[List[Union[str, int]]],
 ) -> Tuple[List[List[Union[str, int]]], Optional[Union[Tuple[int, int], List[Tuple[int, int]]]]]:
     """
-
+    Производит решение лабиринта
     :param grid:
     :return:
     """
 
-    #(x_start, y_start), (x_end, y_end) = get_exits(grid)
     (y_start, x_start), (y_end, x_end) = get_exits(grid)
 
     # Проверка на то, что вход и выход находятся в одной клетке
@@ -225,14 +226,10 @@ def solve_maze(
 
     # Проверка на тупик
     if encircled_exit(grid, (y_start, x_start)) == False or encircled_exit(grid, (y_end, x_end)) == False:
-        print('Тупик')
         return grid, None
-    else:
-        print('Не тупик')
-
-    print('coordinates in solve_maze', (x_start, y_start), (x_end, y_end))
 
     # Поиск пути алгоритмом Дейкстры
+
     # 1. Ставим нолики и 1
     for y in range(len(grid)):
         for x in range(len(grid[y])):
@@ -249,7 +246,6 @@ def solve_maze(
         if if_anything_changed_on_k:
             k += 1
         else:
-            print("Упс, почему-то но прошел")
             return grid, None
 
     # 3. По полученной разметке ищем путь домой
@@ -280,6 +276,5 @@ if __name__ == "__main__":
     GRID = bin_tree_maze(15, 15)
     print(pd.DataFrame(GRID))
     _, PATH = solve_maze(GRID)
-    #PATH = solve_maze(GRID)
     MAZE = add_path_to_grid(GRID, PATH)
     print(pd.DataFrame(MAZE))
