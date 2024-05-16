@@ -142,6 +142,7 @@ class MazeTest(unittest.TestCase):
         self.assertEqual([(1, 0)], maze.get_exits(grid_3))
 
     def test_encircled_exit(self):
+        # Просто все наоборот
         grid = [
             ["■", "■", "■", "■", "■"],
             ["■", " ", "■", " ", "■"],
@@ -179,7 +180,7 @@ class MazeTest(unittest.TestCase):
         ]
         k_1 = 3
         self.assertEqual(
-            [
+            ([
                 ["■", "■", "■", "■", "■", "■", "■", "■", "■", "■", "■"],
                 ["■", 0, 0, 0, 0, 0, 0, 0, 0, 0, "■"],
                 ["■", "■", "■", "■", "■", 0, "■", 0, "■", 4, "■"],
@@ -191,7 +192,7 @@ class MazeTest(unittest.TestCase):
                 ["■", "■", "■", 0, "■", "■", "■", 0, "■", 0, "■"],
                 ["■", 0, 0, 0, "■", 0, 0, 0, "■", 0, "■"],
                 ["■", "■", "■", "■", "■", "■", "■", "■", "■", "■", "■"],
-            ],
+            ], True),
             maze.make_step(grid_1, k_1),
         )
 
@@ -204,13 +205,13 @@ class MazeTest(unittest.TestCase):
         ]
         k_2 = 2
         self.assertEqual(
-            [
+            ([
                 ["■", "■", 1, "■", "■"],
                 ["■", 3, 2, 3, "■"],
                 ["■", "■", "■", 0, "■"],
                 [0, 0, 0, 0, "■"],
                 ["■", "■", "■", "■", "■"],
-            ],
+            ], True),
             maze.make_step(grid_2, k_2),
         )
 
@@ -223,13 +224,13 @@ class MazeTest(unittest.TestCase):
         ]
         k_3 = 5
         self.assertEqual(
-            [
+            ([
                 ["■", "■", "■", "■", "■"],
                 ["■", 4, 3, 2, 1],
                 [6, 5, "■", 3, "■"],
                 ["■", 6, "■", 4, "■"],
                 ["■", "■", "■", "■", "■"],
-            ],
+            ], True),
             maze.make_step(grid_3, k_3),
         )
 

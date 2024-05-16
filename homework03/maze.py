@@ -17,7 +17,7 @@ def remove_wall(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> Li
     :return:
     """
 
-    smeshenia = [(0, +1), (+1, 0)]  # Направления смещения: вниз и вправо
+    smeshenia = [(0, -1), (+1, 0)]  # Направления смещения: вниз и вправо
 
     for y, el in enumerate(grid):
         for x, pos in enumerate(el):
@@ -93,15 +93,19 @@ def get_exits(grid: List[List[Union[str, int]]]) -> List[Tuple[int, int]]:
     x_start = y_start = 0
     x_end = y_end = 0
 
+    x_count = 0
     for y in range(len(grid)):
         for x in range(len(grid[y])):
             if grid[y][x] == "X":
+                x_count += 1
                 if x_start == 0 and y_start == 0:
                     x_start = x
                     y_start = y
                 else:
                     x_end = x
                     y_end = y
+    if x_count < 2:
+        return [(y_start, x_start)]
 
     return [(y_start, x_start), (y_end, x_end)]
 
@@ -188,7 +192,7 @@ def shortest_path(
             way.pop()
             shortest_path(grid, way[-1])
 
-    way.append(exit_coord)
+    #way.append(exit_coord)
 
     return way
 
