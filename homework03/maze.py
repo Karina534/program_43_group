@@ -17,30 +17,43 @@ def remove_wall(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) -> Li
     :return:
     """
 
-    smeshenia = [(0, -1), (+1, 0)]  # Направления смещения: вниз и вправо
+    # smeshenia = [(0, -1), (+1, 0)]  # Направления смещения: вниз и вправо
+    #
+    # for y, el in enumerate(grid):
+    #     for x, pos in enumerate(el):
+    #         direction = choice((0, 1))
+    #
+    #         if grid[y][x] == " ":
+    #             # Проверка на выход из поля
+    #             s_y = y + smeshenia[direction][1]
+    #             s_x = x + smeshenia[direction][0]
+    #
+    #             if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(el)):
+    #                 grid[y + smeshenia[direction][1]][x + smeshenia[direction][0]] = " "
+    #
+    #             elif (
+    #                 (0 <= (y + smeshenia[(direction + 1) % 2][1]) < len(grid))
+    #                 and (0 <= (x + smeshenia[(direction + 1) % 2][0]) < len(el))
+    #                 and s_x != 14
+    #                 and s_y != 14
+    #             ):
+    #                 grid[y + smeshenia[(direction + 1) % 2][1]][x + smeshenia[(direction + 1) % 2][0]] = " "
+    #
+    #             else:
+    #                 continue
+    directions = [(1, 0), (0, 1)]
+    direction = choice(directions)
+    if coord[0] - 1 <= 0 and coord[1] + 1 >= len(grid[0]) - 1:
+        return grid
+    if coord[0] - 1 <= 0:
+        direction = (0, 1)
+    if coord[1] + 1 >= len(grid[0]) - 1:
+        direction = (1, 0)
 
-    for y, el in enumerate(grid):
-        for x, pos in enumerate(el):
-            direction = choice((0, 1))
-
-            if grid[y][x] == " ":
-                # Проверка на выход из поля
-                s_y = y + smeshenia[direction][1]
-                s_x = x + smeshenia[direction][0]
-
-                if (0 <= (s_y) < len(grid)) and (0 <= (s_x) < len(el)):
-                    grid[y + smeshenia[direction][1]][x + smeshenia[direction][0]] = " "
-
-                elif (
-                    (0 <= (y + smeshenia[(direction + 1) % 2][1]) < len(grid))
-                    and (0 <= (x + smeshenia[(direction + 1) % 2][0]) < len(el))
-                    and s_x != 14
-                    and s_y != 14
-                ):
-                    grid[y + smeshenia[(direction + 1) % 2][1]][x + smeshenia[(direction + 1) % 2][0]] = " "
-
-                else:
-                    continue
+    if direction == (1, 0):
+        grid[coord[0] - 1][coord[1]] = " "
+    if direction == (0, 1):
+        grid[coord[0]][coord[1] + 1] = " "
 
     return grid
 
@@ -68,7 +81,8 @@ def bin_tree_maze(rows: int = 15, cols: int = 15, random_exit: bool = True) -> L
     # выбрать второе возможное направление
     # 3. перейти в следующую клетку, сносим между клетками стену
     # 4. повторять 2-3 до тех пор, пока не будут пройдены все клетки
-    remove_wall(grid, (0, 0))
+    for coord in empty_cells:
+        grid = remove_wall(grid, coord)
 
     # генерация входа и выхода
     if random_exit:
@@ -204,14 +218,21 @@ def encircled_exit(grid: List[List[Union[str, int]]], coord: Tuple[int, int]) ->
     :param coord:
     :return:
     """
-    x_pos = coord[1]
-    y_pos = coord[0]
 
-    cheshwnia = [(-1, 0), (1, 0), (0, -1), (0, 1)]  # Влево, вправо, вниз, вверх
-    for i in range(4):
-        if (0 <= (x_pos + cheshwnia[i][0]) < len(grid[1])) and (0 <= (y_pos + cheshwnia[i][1]) < len(grid)):
-            if grid[y_pos + cheshwnia[i][1]][x_pos + cheshwnia[i][0]] != "■":
-                return True
+    x, y = coord[0], coord[1]
+
+    if coord in [(0, 0), (0, len(grid[0]) - 1), (len(grid) - 1, 0), (len(grid) - 1, len(grid[0]) - 1)]:
+        return True
+
+    if x == 0 and grid[x + 1][y] == "■":
+        return True
+    if y == 0 and grid[x][y + 1] == "■":
+        return True
+    if x == len(grid) - 1 and grid[x - 1][y] == "■":
+        return True
+    if y == len(grid[0]) - 1 and grid[x][y - 1] == "■":
+        return True
+
     return False
 
 
@@ -231,7 +252,7 @@ def solve_maze(
         return grid, (x_start, y_start)
 
     # Проверка на тупик
-    if encircled_exit(grid, (y_start, x_start)) == False or encircled_exit(grid, (y_end, x_end)) == False:
+    if encircled_exit(grid, (y_start, x_start)) or encircled_exit(grid, (y_end, x_end)):
         return grid, None
 
     # Поиск пути алгоритмом Дейкстры
