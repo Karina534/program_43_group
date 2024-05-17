@@ -206,7 +206,7 @@ def shortest_path(
             way.pop()
             shortest_path(grid, way[-1])
 
-    #way.append(exit_coord)
+    # way.append(exit_coord)
 
     return way
 
