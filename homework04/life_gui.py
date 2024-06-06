@@ -21,7 +21,6 @@ class GUI(UI):
         self.screen = pygame.display.set_mode(self.screen_size)
 
         self.pause = False
-        self.marked_cells = set()
 
     def draw_lines(self) -> None:
         for x in range(0, self.width, self.cell_size):
@@ -33,14 +32,17 @@ class GUI(UI):
         for i in range(self.life.rows):
             for j in range(self.life.cols):
                 if self.life.curr_generation[i][j] == 1:
-                    pygame.draw.rect(self.screen, pygame.Color("green"),
-                                     (i * self.cell_size, j * self.cell_size, self.cell_size, self.cell_size))
+                    pygame.draw.rect(
+                        self.screen,
+                        pygame.Color("green"),
+                        (i * self.cell_size, j * self.cell_size, self.cell_size, self.cell_size),
+                    )
                 else:
-                    pygame.draw.rect(self.screen, pygame.Color("white"),
-                                     (i * self.cell_size, j * self.cell_size, self.cell_size, self.cell_size))
-                if (i, j) in self.marked_cells:
-                    pygame.draw.rect(self.screen, pygame.Color("green"),
-                                     (i * self.cell_size, j * self.cell_size, self.cell_size, self.cell_size))
+                    pygame.draw.rect(
+                        self.screen,
+                        pygame.Color("white"),
+                        (i * self.cell_size, j * self.cell_size, self.cell_size, self.cell_size),
+                    )
 
     def run(self) -> None:
         pygame.init()
@@ -67,12 +69,18 @@ class GUI(UI):
                         cell_y = y // self.cell_size
                         if self.life.curr_generation[cell_x][cell_y] == 1:
                             self.life.curr_generation[cell_x][cell_y] = 0
-                            pygame.draw.rect(self.screen, pygame.Color("white"),
-                                             (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                            pygame.draw.rect(
+                                self.screen,
+                                pygame.Color("white"),
+                                (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size),
+                            )
                         else:
                             self.life.curr_generation[cell_x][cell_y] = 1
-                            pygame.draw.rect(self.screen, pygame.Color("green"),
-                                         (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size))
+                            pygame.draw.rect(
+                                self.screen,
+                                pygame.Color("green"),
+                                (cell_x * self.cell_size, cell_y * self.cell_size, self.cell_size, self.cell_size),
+                            )
 
             if not self.pause:
                 self.draw_grid()
@@ -86,7 +94,8 @@ class GUI(UI):
             clock.tick(self.speed)
         pygame.quit()
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     life = GameOfLife((50, 50), max_generations=100)
     ui = GUI(life)
     ui.run()
